@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>My Online CV</title>
+  <link rel="stylesheet" href="css/normalize.css">
+  <link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+
+  <header>
+    <nav>
+      <ul class="nav">
+          <li><a href="#">About</a></li>
+          <li><a href="#">Education</a></li>
+          <li><a href="#">Skills</a></li>
+          <li><a href="#">Portfolio</a></li>
+          <li><a href="#">Contact</a></li>
+      </ul>
+    </nav>
+  </header>
+
+  <section class="image-section">
+    <figure>
+      <img src="cat.png" alt="Profile picture of Ariel Frias" width="150">
+      <figcaption>Ariel Frias</figcaption>
+    </figure>
+  </section>
+
+  <main class="page-content">
+    <section class="card" id="subjects">
+      <h2 class="card-header">Subjects Taken from 1st Year to Current Semester</h2>
+      <div class="card-body">
+        <div class="search-container">
+          <input type="text" id="searchBar" placeholder="Search by course name..." onkeyup="filterSubjects()">
+        </div>
+
+        <table id="subjects-table" border="1">
+          <thead>
+            <tr>
+              <th>Year</th>
+              <th>Semester</th>
+              <th>Courses</th>
+            </tr>
+          </thead>
+          <tbody></tbody>
+        </table>
+      </div>
+    </section>
+
+    <section class="card" id="about">
+      <h2 class="card-header">About</h2>
+      <p class="card-body">Hello! Tell us about yourself.</p>
+    </section>
+
+    <section class="card" id="education">
+      <h2 class="card-header">Education</h2>
+      <p class="card-body">Tell us about your education.</p>
+    </section>
+
+    <section class="card" id="skills">
+      <h2 class="card-header">Skills</h2>
+      <p class="card-body">Tell us about your IT Skills.</p>
+    </section>
+
+    <section class="card" id="portfolio">
+      <h2 class="card-header">Portfolio</h2>
+      <p class="card-body">Share your previous IT projects.</p>
+    </section>
+
+    <section class="card" id="contact">
+      <h2 class="card-header">Contact</h2>
+      <p class="card-body">Reach out to me!</p>
+    </section>
+  </main>
+
+  <footer>
+    <p>I am a footer, the last section of this page.</p>
+  </footer>
+
+  <script>
+    document.addEventListener("DOMContentLoaded", () => {
+      fetchSubjects();
+    });
+  
+    function fetchSubjects() {
+      fetch('https://arielll74.github.io/PIT1_SearchFeature/courses.json')
+        .then(response => response.json())
+        .then(data => {
+          window.allSubjects = data.subjects; 
+          displaySubjects(window.allSubjects);
+        })
+        .catch(error => console.error("Error fetching the courses:", error));
+    }
+  
+    function displaySubjects(subjects) {
+      const tableBody = document.querySelector("#subjects-table tbody");
+      tableBody.innerHTML = ""; 
+      subjects.forEach(subject => {
+        let row = document.createElement("tr");
+        row.innerHTML = `
+          <td>${subject.year}</td>
+          <td>${subject.semester}</td>
+          <td>
+            <ul>${subject.courses.map(course => `<li>${course}</li>`).join("")}</ul>
+          </td>
+        `;
+        tableBody.appendChild(row);
+      });
+    }
+  
+    function filterSubjects() {
+      const searchInput = document.getElementById("searchBar").value.toLowerCase();
+  
+      if (!searchInput) {
+        displaySubjects(window.allSubjects);
+        return;
+      }
+  
+      let filteredSubjects = window.allSubjects
+        .map(subject => {
+          let matchingCourses = subject.courses.filter(course =>
+            course.toLowerCase().includes(searchInput)
+          );
+  
+          return matchingCourses.length > 0
+            ? { ...subject, courses: matchingCourses }
+            : null;
+        })
+        .filter(subject => subject !== null);
+  
+      if (filteredSubjects.length > 0) {
+        displaySubjects(filteredSubjects);
+      } else {
+        document.querySelector("#subjects-table tbody").innerHTML =
+          `<tr><td colspan="3">No results found</td></tr>`;
+      }
+    }
+  </script>
+  
+ 
+
+</body>
+</html>
