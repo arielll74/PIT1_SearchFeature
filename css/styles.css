@@ -189,23 +189,23 @@ footer {
   }
 
   .image-section {
-    text-align: center; /* Centers inline elements like images and text */
-    margin: 20px auto; /* Centers the section horizontally */
+    text-align: center; 
+    margin: 20px auto; 
   }
   
   .image-section figure {
-    display: inline-block; /* Ensures the figure behaves as a block while staying centered */
+    display: inline-block; 
     text-align: center;
   }
   
   .image-section img {
-    display: block; /* Removes extra space below the image */
-    margin: 0 auto; /* Centers the image */
+    display: block;
+    margin: 0 auto;
   }
   
   .image-section figcaption {
     margin-top: 10px;
-    font-size: 1.2em; /* Adjust size as needed */
+    font-size: 1.2em; 
     font-weight: bold;
     text-align: center;
   }
